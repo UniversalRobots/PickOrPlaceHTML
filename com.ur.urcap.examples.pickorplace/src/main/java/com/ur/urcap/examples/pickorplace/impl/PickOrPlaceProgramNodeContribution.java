@@ -76,16 +76,15 @@ public class PickOrPlaceProgramNodeContribution implements ProgramNodeContributi
 		root.addChild(nf.createURCapProgramNode(clazz));
 	}
 
-	private int childrenCount(){
-		return urCapAPI.getProgramModel().getRootTreeNode(this).getChildren().size();
+	private boolean isTreeEmpty(){
+		return urCapAPI.getProgramModel().getRootTreeNode(this).getChildren().size() == 0;
 	}
 
 	private void clearSubtree(){
-		TreeNode tree = urCapAPI.getProgramModel().getRootTreeNode(this);
-		int size = childrenCount();
+		TreeNode subTree = urCapAPI.getProgramModel().getRootTreeNode(this);
 		try {
-			for (int i = 0; i < size; i++) {
-				tree.removeChild(tree.getChildren().get(0));
+			for (TreeNode child : subTree.getChildren()) {
+				subTree.removeChild(child);
 			}
 		} catch (TreeStructureException e) {
 			// See e.getMessage() for explanation
@@ -111,7 +110,7 @@ public class PickOrPlaceProgramNodeContribution implements ProgramNodeContributi
 	}
 
 	private void updateView(){
-		boolean emptyTree= childrenCount() == 0;
+		boolean emptyTree = isTreeEmpty();
 		buttonResetTemplate.setEnabled(!emptyTree);
 		buttonPickTemplate.setEnabled(emptyTree);
 		buttonPlaceTemplate.setEnabled(emptyTree);
